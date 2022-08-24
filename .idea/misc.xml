@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="../../../.gradle/caches/transforms-3/025d0c5a407c2a3f4d4b3ff5397211c9/transformed/core-1.5.0/res/layout/custom_dialog.xml" value="0.3007246376811594" />
+        <entry key="analytics/src/main/res/drawable-hdpi/scrim.xml" value="0.3455" />
+        <entry key="analytics/src/main/res/drawable/bgr_button_login.xml" value="0.17291666666666666" />
+        <entry key="analytics/src/main/res/drawable/bgr_profile.xml" value="0.17291666666666666" />
+        <entry key="analytics/src/main/res/drawable/ic_cancel.xml" value="0.17291666666666666" />
+        <entry key="analytics/src/main/res/drawable/ic_circle_xmark_solid.xml" value="0.36041666666666666" />
+        <entry key="analytics/src/main/res/drawable/ic_close.xml" value="0.3455" />
+        <entry key="analytics/src/main/res/drawable/rounded_shape.xml" value="0.3445" />
+        <entry key="analytics/src/main/res/layout/activity_popup_builder.xml" value="0.1" />
+        <entry key="analytics/src/main/res/layout/custom_dialog.xml" value="0.15677083333333333" />
+        <entry key="analytics/src/main/res/layout/custom_html_popup.xml" value="0.2658514492753623" />
+        <entry key="analytics/src/main/res/layout/custom_list_ads.xml" value="0.1111111111111111" />
+        <entry key="analytics/src/main/res/layout/custom_popup.xml" value="0.1" />
+        <entry key="analytics/src/main/res/layout/fragment_in_app_html.xml" value="0.16717325227963525" />
+        <entry key="analytics/src/main/res/layout/fragment_in_app_native.xml" value="0.34375" />
+        <entry key="analytics/src/main/res/layout/fragment_in_app_native_footer.xml" value="0.34375" />
+        <entry key="analytics/src/main/res/layout/fragment_in_app_native_header.xml" value="0.34375" />
+        <entry key="analytics/src/main/res/layout/fragment_popup_builder.xml" value="0.3211050724637681" />
+        <entry key="analytics/src/main/res/layout/image_view_rounded.xml" value="0.34375" />
+        <entry key="analytics/src/main/res/layout/item_ad.xml" value="0.25" />
+        <entry key="analytics/src/main/res/layout/popup_webview.xml" value="0.1" />
+        <entry key="analytics/src/main/res/layout/push_auto_carousel_landscape.xml" value="0.1" />
+        <entry key="analytics/src/main/res/layout/push_big_picture.xml" value="0.34375" />
+        <entry key="analytics/src/main/res/layout/push_carousel_landscape.xml" value="0.34375" />
+        <entry key="analytics/src/main/res/layout/push_collapsed.xml" value="0.34375" />
+        <entry key="analytics/src/main/res/layout/push_input.xml" value="0.34270833333333334" />
+        <entry key="analytics/src/main/res/layout/push_rating.xml" value="0.34375" />
+        <entry key="analytics/src/main/res/layout/push_timer.xml" value="0.34375" />
+        <entry key="analytics/src/main/res/layout/push_timer_colapsed.xml" value="0.34375" />
+        <entry key="analytics/src/main/res/layout/push_zero_bezel.xml" value="0.33" />
+        <entry key="analytics/src/main/res/layout/push_zero_bezel_collapse.xml" value="0.34270833333333334" />
+        <entry key="analytics/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3614583333333333" />
+        <entry key="app/src/main/res/drawable/bgr_circle.xml" value="0.3614583333333333" />
+        <entry key="app/src/main/res/drawable/bgr_edittext.xml" value="0.3614583333333333" />
+        <entry key="app/src/main/res/drawable/bgr_edittext_no_color.xml" value="0.3614583333333333" />
+        <entry key="app/src/main/res/drawable/bgr_profile.xml" value="0.3614583333333333" />
+        <entry key="app/src/main/res/drawable/ic_account_active.xml" value="0.277" />
+        <entry key="app/src/main/res/drawable/ic_account_unactive.xml" value="0.277" />
+        <entry key="app/src/main/res/drawable/ic_card.xml" value="0.277" />
+        <entry key="app/src/main/res/drawable/ic_error.xml" value="0.277" />
+        <entry key="app/src/main/res/drawable/ic_mobio_transfer.xml" value="0.3614583333333333" />
+        <entry key="app/src/main/res/drawable/ic_save.xml" value="0.277" />
+        <entry key="app/src/main/res/drawable/shadow.xml" value="0.3614583333333333" />
+        <entry key="app/src/main/res/layout/activity_confirm_transfer.xml" value="0.3453125" />
+        <entry key="app/src/main/res/layout/activity_home.xml" value="0.28396739130434784" />
+        <entry key="app/src/main/res/layout/activity_kotlin.xml" value="0.32518115942028986" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.3453125" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.333786231884058" />
+        <entry key="app/src/main/res/layout/activity_saving.xml" value="0.1308876811594203" />
+        <entry key="app/src/main/res/layout/activity_send_money.xml" value="0.3453125" />
+        <entry key="app/src/main/res/layout/activity_send_money_in.xml" value="0.33125" />
+        <entry key="app/src/main/res/layout/activity_test.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_transfer_success.xml" value="0.33125" />
+        <entry key="app/src/main/res/layout/custom_combine_view.xml" value="0.19114583333333332" />
+        <entry key="app/src/main/res/layout/custom_combo_text.xml" value="0.3453125" />
+        <entry key="app/src/main/res/layout/custom_dialog.xml" value="0.3453125" />
+        <entry key="app/src/main/res/layout/custom_html_popup.xml" value="0.27898550724637683" />
+        <entry key="app/src/main/res/layout/fragment_a.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_b.xml" value="0.34427083333333336" />
+        <entry key="app/src/main/res/layout/popup_webview.xml" value="0.4625" />
+        <entry key="app/src/main/res/layout/sort_popup_layout.xml" value="0.16666666666666666" />
+      </map>
+    </option>
+  </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.34427083333333336" />
+      </ProjectState>
+    </option>
+  </component>
+</project>
