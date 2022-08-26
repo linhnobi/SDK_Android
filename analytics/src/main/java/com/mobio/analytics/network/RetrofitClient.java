@@ -142,18 +142,6 @@ public class RetrofitClient {
 
             // otherwise just pass the original response on
             return response;
-
-//            int retryCount = 0;
-//            Request request = chain.request();
-//            okhttp3.Response response = chain.proceed(request);
-//            while (!response.isSuccessful() && retryCount < maxLimit) {
-//                retryCount++;
-//                response.close();
-//                response = chain.proceed(request);
-//            }
-//            if (retryCount > 0) {
-//                LogMobio.logD("ErrorInterceptor", "retryCount:" + retryCount);
-//            }
         }
     }
 

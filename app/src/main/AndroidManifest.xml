@@ -16,10 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AnalyticsSDK">
         <activity
-            android:name=".TestActivity"
-            android:exported="true" >
-        </activity>
-        <activity
             android:name=".KotlinActivity"
             android:exported="true" />
         <activity

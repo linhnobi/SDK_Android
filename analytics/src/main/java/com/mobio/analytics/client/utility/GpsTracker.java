@@ -78,7 +78,7 @@ public class GpsTracker extends Service implements LocationListener {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LogMobio.logD("GpsTracker", "Exception "+e.getMessage());
         }
 
         return location;

@@ -1,7 +1,5 @@
 package com.mobio.analytics.client;
 
-import static android.content.Context.ALARM_SERVICE;
-
 import static com.mobio.analytics.client.activity.PopupBuilderActivity.M_KEY_PUSH;
 
 import android.Manifest;
@@ -102,7 +100,7 @@ public class MobioSDKLifecycleCallback implements Application.ActivityLifecycleC
         }
         if (getActivityCount() == 0) {
             identify();
-            SharedPreferencesUtils.editBool(activity, SharedPreferencesUtils.M_KEY_APP_FOREGROUD, true);
+            SharedPreferencesUtils.editBool(activity, SharedPreferencesUtils.M_KEY_APP_FOREGROUND, true);
             trackOpenApp(activity);
 
             trackNotificationOnOff(activity);
@@ -146,7 +144,7 @@ public class MobioSDKLifecycleCallback implements Application.ActivityLifecycleC
 
         if (getActivityCount() == 0) {
             currentActivity = null;
-            SharedPreferencesUtils.editBool(activity, SharedPreferencesUtils.M_KEY_APP_FOREGROUD, false);
+            SharedPreferencesUtils.editBool(activity, SharedPreferencesUtils.M_KEY_APP_FOREGROUND, false);
             trackCloseApp(activity);
             if (lifeCycleHandler != null) {
                 lifeCycleHandler.removeCallbacksAndMessages(null);
@@ -211,27 +209,6 @@ public class MobioSDKLifecycleCallback implements Application.ActivityLifecycleC
         }
     }
 
-    private void startPopupActivity(Activity currentActivity, Push push) {
-        Intent i = new Intent(currentActivity, PopupBuilderActivity.class);
-        i.putExtra(M_KEY_PUSH, new Gson().toJson(push));
-        currentActivity.startActivity(i);
-    }
-
-    private String getNameOfActivity(Activity activity) {
-        String name = null;
-        PackageManager packageManager = activity.getPackageManager();
-        try {
-            ActivityInfo info = packageManager.getActivityInfo(activity.getComponentName(), 0);
-            CharSequence activityLabel = info.name;
-            name = activityLabel.toString();
-        } catch (PackageManager.NameNotFoundException e) {
-            throw new AssertionError("Activity Not Found: " + e.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return name;
-    }
-
     private void identify(){
         mobioSDK.identify();
     }
@@ -256,17 +233,12 @@ public class MobioSDKLifecycleCallback implements Application.ActivityLifecycleC
 
     private void trackOpenScreen(ScreenConfigObject screenConfigObject){
         long actionTime = System.currentTimeMillis();
-//        mobioSDKClient.track(ModelFactory.createBaseList(
-//                ModelFactory.createBase("screen", new Properties().putValue("screen_name", screenConfigObject.getTitle())),
-//                "view", actionTime, "digienty"), actionTime);
-        mobioSDK.track(MobioSDK.SDK_MOBILE_SCREEN_START_IN_APP, new Properties().putValue("screen_name", screenConfigObject.getTitle())
-                .putValue("time", Utils.getTimeUTC()));
+        mobioSDK.track(MobioSDK.SDK_MOBILE_SCREEN_START_IN_APP, new Properties().putValue("screen_name", screenConfigObject.getTitle()));
     }
 
     private void trackCloseScreen(ScreenConfigObject screenConfigObject){
         if (screenConfigObject != null) {
-            mobioSDK.track(MobioSDK.SDK_MOBILE_SCREEN_END_IN_APP, new Properties().putValue("screen_name", screenConfigObject.getTitle())
-                    .putValue("time", Utils.getTimeUTC()));
+            mobioSDK.track(MobioSDK.SDK_MOBILE_SCREEN_END_IN_APP, new Properties().putValue("screen_name", screenConfigObject.getTitle()));
         }
     }
 
@@ -301,12 +273,12 @@ public class MobioSDKLifecycleCallback implements Application.ActivityLifecycleC
                 }, 999); // your request code
     }
 
-    private List<View> getAllViewCanScrollOrEdittext(View v) {
+    private List<View> getAllViewCanScrollOrEditText(View v) {
         ArrayList<View> viewCanScroll = new ArrayList<>();
-        ViewGroup viewgroup = (ViewGroup) v;
-        for (int i = 0; i < viewgroup.getChildCount(); i++) {
-            View v1 = viewgroup.getChildAt(i);
-            if (v1 instanceof ViewGroup) viewCanScroll.addAll(getAllViewCanScrollOrEdittext(v1));
+        ViewGroup viewGroup = (ViewGroup) v;
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View v1 = viewGroup.getChildAt(i);
+            if (v1 instanceof ViewGroup) viewCanScroll.addAll(getAllViewCanScrollOrEditText(v1));
             if (v1 instanceof ListView
                     || v1 instanceof ScrollView
                     || v1 instanceof NestedScrollView
@@ -320,7 +292,8 @@ public class MobioSDKLifecycleCallback implements Application.ActivityLifecycleC
     }
 
     private boolean isActivityValid(Activity activity) {
-        for (int i = 0; i < activityConfigObjectHashMap.values().size(); i++) {
+        int sizeOfActivityConfigObjectHashMap = activityConfigObjectHashMap.values().size();
+        for (int i = 0; i < sizeOfActivityConfigObjectHashMap; i++) {
             ScreenConfigObject screenConfigObject = (ScreenConfigObject) activityConfigObjectHashMap.values().toArray()[i];
             if (screenConfigObject.getClassName().getSimpleName().equals(activity.getClass().getSimpleName())) {
                 return true;
@@ -330,7 +303,7 @@ public class MobioSDKLifecycleCallback implements Application.ActivityLifecycleC
     }
 
     private void trackScrollEvent(Activity activity) {
-        for (View view : getAllViewCanScrollOrEdittext(activity.getWindow().getDecorView())) {
+        for (View view : getAllViewCanScrollOrEditText(activity.getWindow().getDecorView())) {
             if (view instanceof ScrollView) {
                 int[] scrollRange = {0};
                 final ViewTreeObserver vto = view.getViewTreeObserver();
@@ -339,15 +312,10 @@ public class MobioSDKLifecycleCallback implements Application.ActivityLifecycleC
                         @Override
                         public void onGlobalLayout() {
                             int viewHeight = ((ScrollView) view).getChildAt(0).getMeasuredHeight();
-                            int scrollviewHeight = view.getMeasuredHeight();
+                            int scrollViewHeight = view.getMeasuredHeight();
                             // handle viewWidth here...
-
-
-                            scrollRange[0] = viewHeight - scrollviewHeight;
-
+                            scrollRange[0] = viewHeight - scrollViewHeight;
                             view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-
                         }
                     });
                 }
@@ -394,14 +362,9 @@ public class MobioSDKLifecycleCallback implements Application.ActivityLifecycleC
                     countSecond[0]++;
                     timeHandler.postDelayed(this, delay);
 
-                    for (int i = 0; i < screenConfigObject.getVisitTime().length; i++) {
+                    int lengthOfVisitTime = screenConfigObject.getVisitTime().length;
+                    for (int i = 0; i < lengthOfVisitTime; i++) {
                         if (screenConfigObject.getVisitTime()[i] == countSecond[0]) {
-                            long action_time = System.currentTimeMillis();
-//                            mobioSDKClient.track(ModelFactory.createBaseList(
-//                                    ModelFactory.createBase("screen", new Properties().putValue("time_visit", countSecond[0])
-//                                            .putValue("screen_name", screenConfigObject.getTitle())),
-//                                    "time_visit", action_time, "digienty"), action_time);
-
                             mobioSDK.track(MobioSDK.SDK_MOBILE_TIME_VISIT_APP, new Properties().putValue("time_visit", countSecond[0]).putValue("screen_name", screenConfigObject.getTitle()));
                         }
                     }

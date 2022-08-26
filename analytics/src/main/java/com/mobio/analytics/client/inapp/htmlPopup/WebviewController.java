@@ -568,6 +568,35 @@ public class WebviewController {
         }
         MobioSDK.getInstance().track(listEvent, action_time);
         if (!hasSecondPage) dismissMessage();
+
+        Properties firstTag = tags.get(0);
+        String tagName = firstTag.getString("tag_name");
+        String desScreen = null;
+        switch (tagName) {
+            case "screen:Saving":
+                desScreen = "com.mobio.demoanalytics.activity.SavingActivity";
+                break;
+            case "screen:SaveMoneyConfirm":
+                desScreen = "com.mobio.demoanalytics.activity.ConfirmSavingActivity";
+                break;
+            case "screen:Recharge":
+                desScreen = "com.mobio.demoanalytics.activity.MobileRechargeActivity";
+                break;
+            case "screen:RechargeConfirm":
+                desScreen = "com.mobio.demoanalytics.activity.ConfirmMobileRechargeActivity";
+                break;
+        }
+        if(desScreen != null){
+            Class<?> act = null;
+            try {
+                act = Class.forName(desScreen);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            Intent intent = new Intent(activity, act);
+            activity.startActivity(intent);
+            dismissMessage();
+        }
     }
 
     private Properties createValueForBase(String type, String id, Properties field, List<Properties> tags) {

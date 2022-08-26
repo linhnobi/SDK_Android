@@ -16,6 +16,8 @@ import com.mobio.analytics.client.model.digienty.Push;
 import com.mobio.analytics.client.inapp.htmlPopup.HtmlController;
 import com.mobio.analytics.client.inapp.nativePopup.InAppNativeFragment;
 
+import java.security.SecureRandom;
+
 public class InAppController {
 
     private static Push currentlyDisplayingInApp = null;
@@ -48,7 +50,7 @@ public class InAppController {
 //                else if(getPopupPosition(push).equals("bc")){
 //                    inAppFragment = new InAppNativeFooterFragment();
 //                }
-                int reqId = (int) (Math.random() * 10000);
+                int reqId = new SecureRandom().nextInt(10000);
                 MobioSDK.getInstance().showGlobalNotification(push, reqId);
                 break;
             case MInAppTypeHtml:

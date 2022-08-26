@@ -34,9 +34,6 @@ public class MobioApplication extends Application {
         activityConfigObjectHashMap.put("SendMoneyInActivity", new ScreenConfigObject("Transfer",
                 "SendMoneyInActivity", new int[] {10}, SendMoneyInActivity.class,
                 false));
-        activityConfigObjectHashMap.put("TestActivity", new ScreenConfigObject("Test",
-                "TestActivity", new int[] {10}, TestActivity.class,
-                false));
 
         HashMap<String, ScreenConfigObject> fragmentConfigObjectHashMap = new HashMap<>();
         fragmentConfigObjectHashMap.put("FragmentA", new ScreenConfigObject("A",

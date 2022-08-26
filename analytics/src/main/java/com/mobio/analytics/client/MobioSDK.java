@@ -44,6 +44,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -373,35 +374,35 @@ public class MobioSDK {
                 identityDetail.putDId(d_id);
 
                 Notification notification = cacheValueNotification.getNotification();
-                IdentityDetail deviceNoti = notification.getDevice();
-                deviceNoti.putDId(d_id);
+                IdentityDetail deviceNotification = notification.getDevice();
+                deviceNotification.putDId(d_id);
             }
         }
     }
 
-    private boolean sendv2(Properties value) {
+    private boolean sendDataToServer(Properties data) {
         Response<SendEventResponse> response = null;
         try {
-            String typeOfValue = Utils.getTypeOfData(value);
+            String typeOfData = Utils.getTypeOfData(data);
             long nowTime = System.currentTimeMillis();
 
-            if (typeOfValue == null) return false;
-            switch (typeOfValue) {
+            if (typeOfData == null) return false;
+            switch (typeOfData) {
                 case "track":
-                    value.getValueMap("track").putValue("action_time", nowTime);
-                    response = RetrofitClient.getInstance(application).getMyApi().sendEvent(value).execute();
+                    data.getValueMap("track").putValue("action_time", nowTime);
+                    response = RetrofitClient.getInstance(application).getMyApi().sendEvent(data).execute();
                     break;
                 case "identity":
-                    value.getValueMap("identity").putValue("action_time", nowTime);
-                    response = RetrofitClient.getInstance(application).getMyApi().sendDevice(value).execute();
+                    data.getValueMap("identity").putValue("action_time", nowTime);
+                    response = RetrofitClient.getInstance(application).getMyApi().sendDevice(data).execute();
                     break;
                 case "notification":
-                    value.getValueMap("notification").putValue("action_time", nowTime);
-                    response = RetrofitClient.getInstance(application).getMyApi().sendNotification(value).execute();
+                    data.getValueMap("notification").putValue("action_time", nowTime);
+                    response = RetrofitClient.getInstance(application).getMyApi().sendNotification(data).execute();
                     break;
             }
 
-            LogMobio.logD("MobioSDK", "send " + new Gson().toJson(value));
+            LogMobio.logD("MobioSDK", "send " + new Gson().toJson(data));
 
             if (response == null) return false;
 
@@ -473,7 +474,7 @@ public class MobioSDK {
                 int countNoti = pendingJsonPush.size();
                 long maxInterval = 60 * 1000;
                 long minInterval = 2 * 1000;
-                long intervel = Utils.getTimeInterval(maxInterval, minInterval, countNoti);
+                long interval = Utils.getTimeInterval(maxInterval, minInterval, countNoti);
                 long now = System.currentTimeMillis();
 
                 for (int i = 0; i < countNoti; i++) {
@@ -482,7 +483,7 @@ public class MobioSDK {
 
                     PendingIntent alarmIntent = PendingIntent.getBroadcast(application, i, intent, PendingIntent.FLAG_IMMUTABLE);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        alarmManager.setExact(AlarmManager.RTC, now + intervel * (i + 1), alarmIntent);
+                        alarmManager.setExact(AlarmManager.RTC, now + interval * (i + 1), alarmIntent);
                     }
                 }
             }
@@ -503,7 +504,8 @@ public class MobioSDK {
         boolean checkEvent = false; //check case nếu các jsonpush complete hết rồi thì show pendingpush
         boolean eventKeyEqual = false; //check case tất cả eventkey không thoả mãn thì show pendingpush
 
-        for (int i = 0; i < currentJsonEvent.size(); i++) {
+        int sizeOfCurrentJsonEvent = currentJsonEvent.size();
+        for (int i = 0; i < sizeOfCurrentJsonEvent; i++) {
             Properties tempEvent = currentJsonEvent.get(i);
             String tpEventKey = tempEvent.getString("event_key");
 
@@ -518,15 +520,16 @@ public class MobioSDK {
             String eventStr = new Gson().toJson(eventData);
             if (Utils.compareTwoJson(edStr, eventStr)) {
                 eventKeyEqual = true;
-                List<Properties> childrens = tempEvent.getList("children_node", Properties.class);
+                List<Properties> children = tempEvent.getList("children_node", Properties.class);
 
-                if (childrens == null || childrens.size() <= 0) {
+                if (children == null || children.size() <= 0) {
                     return;
                 }
 
                 boolean runFirstPushDone = false;
-                for (int j = 0; j < childrens.size(); j++) {
-                    Properties tempChildren = childrens.get(j);
+                int sizeOfChildren = children.size();
+                for (int j = 0; j < sizeOfChildren; j++) {
+                    Properties tempChildren = children.get(j);
                     if (tempChildren == null) {
                         return;
                     }
@@ -537,7 +540,8 @@ public class MobioSDK {
                     if (!complete) {
                         checkEvent = true;
                         String childrenId = tempChildren.getString("id");
-                        for (int k = 0; k < currentJsonPush.size(); k++) {
+                        int sizeOfCurrentJsonPush = currentJsonPush.size();
+                        for (int k = 0; k < sizeOfCurrentJsonPush; k++) {
                             Properties tempPush = currentJsonPush.get(k);
                             if (tempPush == null) {
                                 return;
@@ -560,7 +564,8 @@ public class MobioSDK {
                                                 >= pendingJsonPush.get(pendingJsonPush.size() - 1).getLong("expire", 0)) {
                                             pendingJsonPush.add(tempPush);
                                         } else {
-                                            for (int l = 0; l < pendingJsonPush.size(); l++) {
+                                            int sizeOfPendingJsonPush = pendingJsonPush.size();
+                                            for (int l = 0; l < sizeOfPendingJsonPush; l++) {
                                                 if (tempPush.getLong("expire", 0) >= pendingJsonPush.get(l).getLong("expire", 0)
                                                         && tempPush.getLong("expire", 0) <= pendingJsonPush.get(l + 1).getLong("expire", 0)) {
                                                     pendingJsonPush.add(l + 1, tempPush);
@@ -572,8 +577,8 @@ public class MobioSDK {
                                     updateListSharePref(pendingJsonPush, SharedPreferencesUtils.M_KEY_PENDING_PUSH);
                                 }
                                 tempChildren.put("complete", true);
-                                childrens.set(j, tempChildren);
-                                tempEvent.put("children_node", childrens);
+                                children.set(j, tempChildren);
+                                tempEvent.put("children_node", children);
                                 currentJsonEvent.set(i, tempEvent);
                                 runFirstPushDone = true;
                             }
@@ -626,10 +631,10 @@ public class MobioSDK {
     }
 
     private void showPushInApp(Push push) {
-        if (SharedPreferencesUtils.getBool(application, SharedPreferencesUtils.M_KEY_APP_FOREGROUD)) {
+        if (SharedPreferencesUtils.getBool(application, SharedPreferencesUtils.M_KEY_APP_FOREGROUND)) {
             showGlobalPopup(push);
         } else {
-            int randomId = (int) (Math.random() * 10000);
+            int randomId = new SecureRandom().nextInt(10000);
             MobioSDK.getInstance().showGlobalNotification(push, randomId);
         }
     }
@@ -649,14 +654,14 @@ public class MobioSDK {
                     continue;
                 }
                 for (Properties event : listEvent) {
-                    String mkey = event.getString("event_key");
+                    String mKey = event.getString("event_key");
                     Properties mData = (Properties) event.get("event_data");
                     String statusEvent = event.getString("status");
 
-                    if (mkey == null || mData == null || statusEvent == null) continue;
+                    if (mKey == null || mData == null || statusEvent == null) continue;
                     String edStr = new Gson().toJson(mData);
                     String eventStr = new Gson().toJson(eventData);
-                    if (mkey.equals(eventKey)
+                    if (mKey.equals(eventKey)
                             && Utils.compareTwoJson(edStr, eventStr)
                             && statusEvent.equals("pending")) {
                         event.put("status", "done");
@@ -680,24 +685,17 @@ public class MobioSDK {
     private void processSend(Properties data) {
         listDataWaitToSend = getListFromSharePref(SharedPreferencesUtils.M_KEY_SEND_QUEUE);
 
-        if (Utils.isOnline(application)) {
-//            if (listDataWaitToSend != null && listDataWaitToSend.size() > 0) {
-//                for (Properties vm : listDataWaitToSend) {
-//                    if (sendv2(vm)) {
-//                        listDataWaitToSend.remove(vm);
-//                        updateListSharePref(listDataWaitToSend, SharedPreferencesUtils.KEY_SEND_QUEUE);
-//                    }
-//                }
-//            }
-            if(SharedPreferencesUtils.getBool(application, SharedPreferencesUtils.M_KEY_ALLOW_CALL_API)) {
-                if (!sendv2(data)) {
-                    addSendQueue(data);
-                }
-            }
-            else {
-                addSendQueue(data);
-            }
-        } else {
+        if (!Utils.isOnline(application)) {
+            addSendQueue(data);
+            return;
+        }
+
+        if (!SharedPreferencesUtils.getBool(application, SharedPreferencesUtils.M_KEY_ALLOW_CALL_API)) {
+            addSendQueue(data);
+            return;
+        }
+
+        if (!sendDataToServer(data)) {
             addSendQueue(data);
         }
     }
@@ -715,7 +713,8 @@ public class MobioSDK {
 
         if (typeData.equals("track")) {
             boolean isExistTrackInList = false;
-            for (int i = 0; i < listDataWaitToSend.size(); i++) {
+            int sizeOfListDataWaitToSend = listDataWaitToSend.size();
+            for (int i = 0; i < sizeOfListDataWaitToSend; i++) {
                 Properties tempPro = listDataWaitToSend.get(i);
                 if (Objects.requireNonNull(Utils.getTypeOfData(tempPro)).equals("track")) {
                     isExistTrackInList = true;
@@ -824,7 +823,7 @@ public class MobioSDK {
                     MobioSDK.getInstance().track(ModelFactory.createBaseListForPopup(push, "popup", "receive", actionTime), actionTime);
                 }
 
-                if (SharedPreferencesUtils.getBool(application, SharedPreferencesUtils.M_KEY_APP_FOREGROUD)) {
+                if (SharedPreferencesUtils.getBool(application, SharedPreferencesUtils.M_KEY_APP_FOREGROUND)) {
                     showGlobalPopup(push);
                 } else {
                     int reqId = (int) (Math.random() * 10000);
@@ -862,7 +861,7 @@ public class MobioSDK {
         if (listDataWaitToSend != null && listDataWaitToSend.size() > 0) {
             for (Properties vm : listDataWaitToSend) {
                 analyticsExecutor.submit(() -> {
-                    if (sendv2(vm)) {
+                    if (sendDataToServer(vm)) {
                         listDataWaitToSend.remove(vm);
                         updateListSharePref(listDataWaitToSend, SharedPreferencesUtils.M_KEY_SEND_QUEUE);
                     }

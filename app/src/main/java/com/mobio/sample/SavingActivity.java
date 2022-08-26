@@ -44,7 +44,7 @@ public class SavingActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         public void run() {
             if(com.mobio.analytics.client.utility.SharedPreferencesUtils.getBool(SavingActivity.this,
-                    com.mobio.analytics.client.utility.SharedPreferencesUtils.M_KEY_APP_FOREGROUD)){
+                    com.mobio.analytics.client.utility.SharedPreferencesUtils.M_KEY_APP_FOREGROUND)){
             }
             else {
                 int reqCode = 1;

@@ -160,7 +160,7 @@ public class DownloadManager {
                 try {
                     flushedInputStream.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "IOException " + e);
                 }
             }
         }

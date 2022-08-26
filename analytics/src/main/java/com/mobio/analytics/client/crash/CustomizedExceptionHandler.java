@@ -64,7 +64,7 @@ public class CustomizedExceptionHandler implements Thread.UncaughtExceptionHandl
             fileWriter.flush();
             fileWriter.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogMobio.logD("CustomizedExceptionHandler", "Exception "+e.getMessage());
         }
     }
 

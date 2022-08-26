@@ -22,6 +22,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.text.HtmlCompat;
 
 import com.mobio.analytics.R;
+import com.mobio.analytics.client.MobioSDK;
 import com.mobio.analytics.client.model.digienty.Properties;
 import com.mobio.analytics.client.model.digienty.Push;
 import com.mobio.analytics.client.model.factory.PendingIntentFactory;
@@ -431,7 +432,6 @@ public class RichNotification {
                 notificationManagerBezel.notify(reqId, notificationBezel);
                 break;
         }
-
     }
 
     private void createNotification(Context context, RemoteViews contentView, RemoteViews bigContentView, PendingIntent contentPendingIntent, PendingIntent deletePendingIntent, int reqId){

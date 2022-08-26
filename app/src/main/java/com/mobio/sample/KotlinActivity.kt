@@ -30,12 +30,6 @@ class KotlinActivity : AppCompatActivity() {
                 "SendMoneyInActivity", intArrayOf(10), SendMoneyInActivity::class.java,
                 false
             )
-        activityConfigObjectHashMap["TestActivity"] =
-            ScreenConfigObject(
-                "Test",
-                "TestActivity", intArrayOf(10), TestActivity::class.java,
-                false
-            )
 
         val fragmentConfigObjectHashMap = HashMap<String, ScreenConfigObject>()
         fragmentConfigObjectHashMap["FragmentA"] =

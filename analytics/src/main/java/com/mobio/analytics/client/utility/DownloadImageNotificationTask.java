@@ -31,8 +31,7 @@ public class DownloadImageNotificationTask extends AsyncTask<String, Void, Bitma
             InputStream in = new java.net.URL(urldisplay).openStream();
             mIcon11 = BitmapFactory.decodeStream(in);
         } catch (Exception e) {
-            LogMobio.logD("Error", e.getMessage());
-            e.printStackTrace();
+            LogMobio.logD("DownloadImageNotificationTask", "Exception "+e.getMessage());
         }
         return mIcon11;
     }

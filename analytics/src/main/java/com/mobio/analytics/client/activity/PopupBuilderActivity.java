@@ -3,11 +3,7 @@ package com.mobio.analytics.client.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.RelativeLayout;
 import com.mobio.analytics.R;

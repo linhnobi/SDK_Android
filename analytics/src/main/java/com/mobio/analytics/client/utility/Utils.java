@@ -64,28 +64,6 @@ public class Utils {
         return getReferrerCompatible(activity);
     }
 
-    public static boolean isHtml(String content) {
-        // adapted from post by Phil Haack and modified to match better
-        String tagStart =
-                "\\<\\w+((\\s+\\w+(\\s*\\=\\s*(?:\".*?\"|'.*?'|[^'\"\\>\\s]+))?)+\\s*|\\s*)\\>";
-        String tagEnd =
-                "\\</\\w+\\>";
-        String tagSelfClosing =
-                "\\<\\w+((\\s+\\w+(\\s*\\=\\s*(?:\".*?\"|'.*?'|[^'\"\\>\\s]+))?)+\\s*|\\s*)/\\>";
-        String htmlEntity =
-                "&[a-zA-Z][a-zA-Z0-9]+;";
-        Pattern htmlPattern = Pattern.compile(
-                "(" + tagStart + ".*" + tagEnd + ")|(" + tagSelfClosing + ")|(" + htmlEntity + ")",
-                Pattern.DOTALL
-        );
-
-        boolean ret = false;
-        if (content != null) {
-            ret = htmlPattern.matcher(content).find();
-        }
-        return ret;
-    }
-
     private static ViewDimension getScreenDimension(Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         int dpHeight = displayMetrics.heightPixels;
@@ -254,22 +232,6 @@ public class Utils {
         return Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
     }
 
-    public static String getMD5(String data) {
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-            messageDigest.update(data.getBytes());
-            byte[] digest = messageDigest.digest();
-            StringBuffer sb = new StringBuffer();
-            for (byte b : digest) {
-                sb.append(Integer.toHexString((int) (b & 0xff)));
-            }
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
@@ -305,7 +267,7 @@ public class Utils {
         try {
             ActivityInfo[] list = pManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES).activities;
             for (ActivityInfo activityInfo : list) {
-                //todo save list activity
+                //TODO
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -357,9 +319,7 @@ public class Utils {
     }
 
     public static Map<String, String> getHeader(Context context) {
-        //String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdmYzBhMzNjLWJhZjUtMTFlNy1hN2MyLTAyNDJhYzE4MDAwMyIsInVzZXJuYW1lIjoiYWRtaW5AcGluZ2NvbXNob3AiLCJmdWxsbmFtZSI6Ik5ndXlcdTFlYzVuIFZcdTAxMDNuIEEiLCJwaG9uZV9udW1iZXIiOiIrODQzMjM0NTY3ODkiLCJlbWFpbCI6InRoYWl0dEBtb2Jpby52biIsIm1lcmNoYW50X2lkIjoiMWI5OWJkY2YtZDU4Mi00ZjQ5LTk3MTUtMWI2MWRmZmYzOTI0IiwiaXNfYWRtaW4iOjEsImlzX21vYmlvIjoyLCJhdmF0YXIiOiJodHRwczovL3QxLm1vYmlvLnZuL3N0YXRpYy8xYjk5YmRjZi1kNTgyLTRmNDktOTcxNS0xYjYxZGZmZjM5MjQvZWMwYTEwZWUtMjg3NC00NGUzLTgwMzQtZmE4OWYyODczZGMyLmJpbiIsImlhdCI6MTYzNDYxMTkyMC45ODQxNzg1LCJpc19zdWJfYnJhbmQiOmZhbHNlLCJ1c2VfY2FsbGNlbnRlciI6MywibWVyY2hhbnRfbmFtZSI6IlBpbmdjb21TaG9wIiwibWVyY2hhbnRfYXZhdGFyIjoiaHR0cHM6Ly90MS5tb2Jpby52bi9zdGF0aWMvMWI5OWJkY2YtZDU4Mi00ZjQ5LTk3MTUtMWI2MWRmZmYzOTI0LzFlNDhhYmM3LTUyNzctNGYxYy1hZjU5LTA3ZThlZDQwMmU0Ny5qcGciLCJtZXJjaGFudF90eXBlIjoxLCJ4cG9pbnRfc3RhdHVzIjozLCJyb2xlX2dyb3VwIjoib3duZXIiLCJtZXJjaGFudF9jb2RlIjoiUElOR0NPTVNIT1AiLCJ0eXBlIjpbXSwiZXhwIjoxNjM0Njk4MzIxLjA2NDk0N30.eACtwpF7GPCE4O2V9n8SzA0FPToUwngbe1g92lDzm2Y";
         String token = SharedPreferencesUtils.getString(context, SharedPreferencesUtils.M_KEY_API_TOKEN);
-        //String merchantID = "1b99bdcf-d582-4f49-9715-1b61dfff3924";
         String merchantID = SharedPreferencesUtils.getString(context, SharedPreferencesUtils.M_KEY_MERCHANT_ID);
         Map<String, String> header = new HashMap<>();
         header.put("Authorization", token);
@@ -387,7 +347,6 @@ public class Utils {
     }
 
     public static String getLocale(Context context) {
-        //Locale current = context.getResources().getConfiguration().locale;
         return Locale.getDefault().getLanguage();
     }
 

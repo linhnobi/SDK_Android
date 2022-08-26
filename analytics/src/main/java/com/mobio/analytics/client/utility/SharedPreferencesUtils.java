@@ -4,11 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class SharedPreferencesUtils {
-    private static final String M_KEY_SP = "keysp";
-    public static final String M_KEY_FIRST_START_APP = "keyfirststartapp";
-    public static final String M_KEY_VERSION_CODE = "keyversioncode";
-    public static final String M_KEY_VERSION_NAME = "keyversionname";
-    public static final String M_KEY_APP_FOREGROUD = "keyappforegroud";
+    private static final String M_KEY_SHARED_PREFERENCES = "key_shared_preferences";
+    public static final String M_KEY_FIRST_START_APP = "key_first_start_app";
+    public static final String M_KEY_VERSION_CODE = "key_version_code";
+    public static final String M_KEY_VERSION_NAME = "key_version_name";
+    public static final String M_KEY_APP_FOREGROUND = "key_app_foreground";
     public static final String M_KEY_STATE_LOGIN = "key_state_login";
     public static final String M_KEY_USER_NAME = "key_username";
     public static final String M_KEY_PASSWORD = "key_password";
@@ -30,7 +30,7 @@ public class SharedPreferencesUtils {
     public static final String M_KEY_ALLOW_CALL_API = "m_allow_call_api";
 
     private static SharedPreferences getSharedPreferences(Context context){
-        return context.getSharedPreferences(M_KEY_SP, Context.MODE_PRIVATE);
+        return context.getSharedPreferences(M_KEY_SHARED_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     public static void editString(Context context, String key, String value){

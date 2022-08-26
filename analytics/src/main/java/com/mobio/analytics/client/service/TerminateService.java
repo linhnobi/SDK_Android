@@ -10,6 +10,7 @@ import android.os.IBinder;
 import com.mobio.analytics.client.MobioSDK;
 import com.mobio.analytics.client.model.digienty.Properties;
 import com.mobio.analytics.client.receiver.AlarmReceiver;
+import com.mobio.analytics.client.utility.LogMobio;
 import com.mobio.analytics.client.utility.SharedPreferencesUtils;
 import com.mobio.analytics.client.utility.Utils;
 
@@ -29,7 +30,6 @@ public class TerminateService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
@@ -37,10 +37,11 @@ public class TerminateService extends Service {
     public void onTaskRemoved(Intent rootIntent) {
         try {
             ArrayList<Properties> pendingJsonPush = MobioSDK.getInstance().getListFromSharePref(SharedPreferencesUtils.M_KEY_PENDING_PUSH);
-            if (pendingJsonPush.size() > 0) {
+            int sizeOfPendingJsonPush = pendingJsonPush.size();
+            if (sizeOfPendingJsonPush > 0) {
                 int countNoti = pendingJsonPush.size();
-                long maxInterval = 60 * 1000;
-                long minInterval = 2 * 1000;
+                long maxInterval = 60 * 1000L;
+                long minInterval = 2 * 1000L;
                 long interval = Utils.getTimeInterval(maxInterval, minInterval, countNoti);
                 long now = System.currentTimeMillis();
 
@@ -55,7 +56,7 @@ public class TerminateService extends Service {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LogMobio.logE("TerminateService", "Exception "+e.getMessage());
         }
         stopSelf();
     }
