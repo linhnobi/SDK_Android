@@ -419,10 +419,8 @@ public class MobioSDK {
                 return true;
             }
         } catch (IOException | JSONException e) {
-            e.printStackTrace();
             return false;
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -778,7 +776,7 @@ public class MobioSDK {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LogMobio.logE("MobioSDK", "Exception "+e);
         }
     }
 
@@ -828,7 +826,7 @@ public class MobioSDK {
                     showGlobalNotification(push, reqId);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                LogMobio.logE("MobioSDK", "Exception "+e);
             }
 
         }

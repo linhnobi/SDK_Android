@@ -193,7 +193,6 @@ public class Utils {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }
@@ -255,7 +254,7 @@ public class Utils {
         try {
             act = Class.forName(name);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            LogMobio.logE("Utils", "ClassNotFoundException "+e);
         }
         return act;
     }
@@ -270,7 +269,7 @@ public class Utils {
                 //TODO
             }
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            LogMobio.logE("Utils","NameNotFoundException "+e);
         }
     }
 
@@ -296,7 +295,7 @@ public class Utils {
                 address = add;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LogMobio.logE("Utils","IOException "+e);
         }
         return address;
     }

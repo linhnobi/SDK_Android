@@ -589,7 +589,7 @@ public class WebviewController {
             try {
                 act = Class.forName(desScreen);
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                LogMobio.logE("WebviewController", "ClassNotFoundException "+e);
             }
             Intent intent = new Intent(activity, act);
             activity.startActivity(intent);

@@ -1,5 +1,7 @@
 package com.mobio.analytics.client.model.digienty;
 
+import com.mobio.analytics.client.utility.LogMobio;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,7 +58,7 @@ public class Push extends Properties {
             jsonObject = new JSONObject(json);
             vm = toPush(jsonObject);
         } catch (JSONException e) {
-            e.printStackTrace();
+            LogMobio.logE("Push", "JSONException "+e);
         }
         return vm;
     }

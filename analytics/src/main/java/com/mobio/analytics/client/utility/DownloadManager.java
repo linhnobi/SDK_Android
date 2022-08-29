@@ -152,7 +152,7 @@ public class DownloadManager {
                 try {
                     input.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LogMobio.logE("DownloadManager","IOException "+e);
                 }
             }
 

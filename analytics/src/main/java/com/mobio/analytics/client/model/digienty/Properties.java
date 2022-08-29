@@ -1,5 +1,6 @@
 package com.mobio.analytics.client.model.digienty;
 
+import com.mobio.analytics.client.utility.LogMobio;
 import com.mobio.analytics.client.utility.Utils;
 
 import org.json.JSONArray;
@@ -38,7 +39,7 @@ public class Properties extends ValueMap {
             jsonObject = new JSONObject(json);
             vm = toProperties(jsonObject);
         } catch (JSONException e) {
-            e.printStackTrace();
+            LogMobio.logE("Properties", "JSONException "+e);
         }
         return vm;
     }
