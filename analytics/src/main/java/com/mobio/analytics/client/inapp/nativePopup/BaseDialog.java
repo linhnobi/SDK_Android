@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.mobio.analytics.R;
 import com.mobio.analytics.client.utility.DownloadImageTask;
-import com.mobio.analytics.client.utility.LogMobio;
 
 public abstract class BaseDialog {
     protected Activity activity;
@@ -36,7 +35,6 @@ public abstract class BaseDialog {
         String urlImage = getImage();
 
         if (urlImage != null) {
-            LogMobio.logD("QuanLA", "url");
             imvContent.setVisibility(View.VISIBLE);
             new DownloadImageTask(imvContent)
                     .execute(urlImage);

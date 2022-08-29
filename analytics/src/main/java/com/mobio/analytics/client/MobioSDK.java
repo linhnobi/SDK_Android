@@ -802,7 +802,6 @@ public class MobioSDK {
                     Properties properties = Properties.convertJsonStringtoProperties(remoteMessage.getData().toString());
                     if(properties.containsKey("tracking_code")) {
                         int status = properties.getValueMap("tracking_code").getInt("status", 0);
-                        LogMobio.logD("QuanLA", "status "+status);
                         if(status == 1) {
                             SharedPreferencesUtils.editBool(application, SharedPreferencesUtils.M_KEY_ALLOW_CALL_API, true);
                             if(Utils.isOnline(application)) {
@@ -816,7 +815,6 @@ public class MobioSDK {
                     return;
                 }
 
-                LogMobio.logD("QuanLA", new Gson().toJson(push));
 
                 if (push.getAlert().getContentType().equals(Push.Alert.TYPE_POPUP)) {
                     long actionTime = System.currentTimeMillis();

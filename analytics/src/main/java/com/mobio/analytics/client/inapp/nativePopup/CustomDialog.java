@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.mobio.analytics.client.model.digienty.Push;
-import com.mobio.analytics.client.utility.LogMobio;
 
 public class CustomDialog extends BaseDialog{
     private Push push;
@@ -62,7 +61,6 @@ public class CustomDialog extends BaseDialog{
 
     @Override
     String getImage() {
-        LogMobio.logD("QuanLA", push.getAlert().getString("background_image"));
         return push.getAlert().getString("background_image");
     }
 }

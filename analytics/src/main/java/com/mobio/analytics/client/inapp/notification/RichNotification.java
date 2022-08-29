@@ -22,7 +22,6 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.text.HtmlCompat;
 
 import com.mobio.analytics.R;
-import com.mobio.analytics.client.MobioSDK;
 import com.mobio.analytics.client.model.digienty.Properties;
 import com.mobio.analytics.client.model.digienty.Push;
 import com.mobio.analytics.client.model.factory.PendingIntentFactory;
@@ -220,13 +219,6 @@ public class RichNotification {
                 carouselView.setOnClickPendingIntent(R.id.carousel_landscape_image, contentPendingIntent);
                 carouselView.setOnClickPendingIntent(R.id.left, clickLeftPendingIntent);
                 carouselView.setOnClickPendingIntent(R.id.right, clickRightPendingIntent);
-
-//                for (int i = 0; i < listImage.size(); i++) {
-//                    LogMobio.logD("QuanLA", i+"");
-//                    RemoteViews imageView = new RemoteViews(context.getPackageName(), R.layout.image_view_rounded);
-//                    loadImageURLIntoRemoteView(R.id.flipper_img, listImage.get(i), imageView, context);
-//                    carouselView.addView(R.id.carousel_landscape_image, imageView);
-//                }
 
                 createNotification(context, collapsedView, carouselView, contentPendingIntent, deletePendingIntent, reqId);
                 break;

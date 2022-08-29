@@ -410,7 +410,7 @@ public class MobioApplication extends Application {
 //        MobioSDKClient.getInstance().setBothEventAndPushJson(strEvent, strPush);
 //        MobioSDKClient.getInstance().setCurrentJsonJourney(strJourney);
 
-        Utils.listAllActivities(this);
+//        Utils.listAllActivities(this);
         initAndGenTokenFirebase(this);
     }
 

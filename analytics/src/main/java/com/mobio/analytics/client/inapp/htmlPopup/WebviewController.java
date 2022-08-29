@@ -184,7 +184,6 @@ public class WebviewController {
         webView.addJavascriptInterface(new JavaScriptInterface(new JavaScriptInterface.OnActionJavascript() {
             @Override
             public void onReceiveMessage(String data) {
-                LogMobio.logD("QuanLA", "data "+data);
                 processReceivedMessage(data, webView);
             }
 
@@ -432,7 +431,6 @@ public class WebviewController {
                             webView.loadUrl("javascript:showPopup({popup_position:'cc'});");
                         }
 
-                        LogMobio.logD("QuanLA", "Done");
 
                         long actionTime = System.currentTimeMillis();
                         MobioSDK.getInstance().track(ModelFactory.createBaseListForPopup(push, "popup", "open", actionTime), actionTime);
