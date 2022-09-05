@@ -19,9 +19,6 @@ import java.util.ArrayList;
 public class TerminateService extends Service {
     private AlarmManager alarmManager;
 
-    public TerminateService() {
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();

@@ -44,6 +44,9 @@ public class ClickNotificationService extends IntentService {
     public static final String TYPE_INPUT_NO = "M_TYPE_NO";
     public static final String TYPE_INPUT_MAYBE = "M_TYPE_MAYBE";
 
+    private static final String IMAGE_URL_KEY = "image_url";
+    private static final String RICH_NOTIFICATION_KEY = "rich_notification";
+
     public ClickNotificationService() {
         super("ClickNotificationService");
     }
@@ -126,22 +129,22 @@ public class ClickNotificationService extends IntentService {
 
     private void handleActionClickLeft(String pushStr, int id) {
         Push push = Push.convertJsonStringtoPush(pushStr);
-        List<String> listImageUrl = ((List<String>) push.getAlert().getValueMap("rich_notification").get("image_url"));
+        List<String> listImageUrl = ((List<String>) push.getAlert().getValueMap(RICH_NOTIFICATION_KEY).get(IMAGE_URL_KEY));
         assert listImageUrl != null;
         listImageUrl.add(0, listImageUrl.get(listImageUrl.size()-1));
         listImageUrl.remove(listImageUrl.size()-1);
-        push.getAlert().getValueMap("rich_notification").putValue("image_url", listImageUrl);
+        push.getAlert().getValueMap(RICH_NOTIFICATION_KEY).putValue(IMAGE_URL_KEY, listImageUrl);
 
         MobioSDK.getInstance().showGlobalNotification(push, id);
     }
 
     private void handleActionClickRight(String pushStr, int id) {
         Push push = Push.convertJsonStringtoPush(pushStr);
-        List<String> listImageUrl = ((List<String>) push.getAlert().getValueMap("rich_notification").get("image_url"));
+        List<String> listImageUrl = ((List<String>) push.getAlert().getValueMap(RICH_NOTIFICATION_KEY).get(IMAGE_URL_KEY));
         assert listImageUrl != null;
         listImageUrl.add(listImageUrl.get(0));
         listImageUrl.remove(0);
-        push.getAlert().getValueMap("rich_notification").putValue("image_url", listImageUrl);
+        push.getAlert().getValueMap(RICH_NOTIFICATION_KEY).putValue(IMAGE_URL_KEY, listImageUrl);
 
         MobioSDK.getInstance().showGlobalNotification(push, id);
     }

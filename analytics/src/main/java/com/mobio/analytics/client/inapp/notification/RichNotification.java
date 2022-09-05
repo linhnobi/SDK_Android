@@ -45,6 +45,9 @@ public class RichNotification {
     private static final String TYPE_ZERO_BEZEL = "ZERO_BEZEL";
     private static final String TYPE_INPUT = "INPUT";
 
+    private static final String BACKGROUND_IMAGE_KEY = "background_image";
+    private static final String ACTION_SET_MAXLINES = "setMaxLines";
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void createNotificationChannel(Context context, String channelId, String channelName, int importance) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -104,34 +107,19 @@ public class RichNotification {
         if(style == null) style = "";
 
         switch (style) {
-            default: {
-                String urlImage = push.getAlert().getString("background_image");
-
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MY_CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle(push.getAlert().getTitle())
-                        .setContentText(push.getAlert().getBody())
-                        .setContentIntent(contentPendingIntent)
-                        .setDeleteIntent(deletePendingIntent)
-                        .setGroup("SDKMobio")
-                        .setAutoCancel(true);
-
-                    new DownloadImageNotificationTask(context, builder, reqId).execute(urlImage);
-                break;
-            }
             case TYPE_BIG_PICTURE: {
                 RemoteViews collapsedView = new RemoteViews(context.getPackageName(), R.layout.push_collapsed);
                 collapsedView.setTextViewText(R.id.notificationTitle, push.getAlert().getTitle());
                 collapsedView.setTextViewText(R.id.notificationText, push.getAlert().getBody());
 
-                String urlImage = push.getAlert().getString("background_image");
+                String urlImage = push.getAlert().getString(BACKGROUND_IMAGE_KEY);
 
                 Bitmap bigPicture = DownloadManager.getBitmapFromURL(urlImage, false);
 
                 RemoteViews bigPictureView = new RemoteViews(context.getPackageName(), R.layout.push_big_picture);
                 bigPictureView.setTextViewText(R.id.notificationTitle, push.getAlert().getTitle());
                 bigPictureView.setTextViewText(R.id.notificationText, push.getAlert().getBody());
-                bigPictureView.setInt(R.id.notificationText, "setMaxLines", 4);
+                bigPictureView.setInt(R.id.notificationText, ACTION_SET_MAXLINES, 4);
 
                 if (bigPicture != null) {
                     bigPictureView.setViewVisibility(R.id.big_picture_imageview, View.VISIBLE);
@@ -153,14 +141,14 @@ public class RichNotification {
                 PendingIntent actionNoPendingIntent = PendingIntentFactory.getPushActionPendingIntent(context, push, reqId, ClickNotificationService.TYPE_INPUT_NO);
                 PendingIntent actionMaybePendingIntent = PendingIntentFactory.getPushActionPendingIntent(context, push, reqId, ClickNotificationService.TYPE_INPUT_MAYBE);
 
-                String urlImage = push.getAlert().getString("background_image");
+                String urlImage = push.getAlert().getString(BACKGROUND_IMAGE_KEY);
 
                 Bitmap bigPicture = DownloadManager.getBitmapFromURL(urlImage, false);
 
                 RemoteViews bigPictureView = new RemoteViews(context.getPackageName(), R.layout.push_input);
                 bigPictureView.setTextViewText(R.id.notificationTitle, push.getAlert().getTitle());
                 bigPictureView.setTextViewText(R.id.notificationText, push.getAlert().getBody());
-                bigPictureView.setInt(R.id.notificationText, "setMaxLines", 3);
+                bigPictureView.setInt(R.id.notificationText, ACTION_SET_MAXLINES, 3);
 
                 bigPictureView.setTextViewText(R.id.tv_action1, "Yes");
                 bigPictureView.setOnClickPendingIntent(R.id.tv_action1, actionYesPendingIntent);
@@ -273,7 +261,7 @@ public class RichNotification {
                 npsView.setTextViewText(R.id.notificationTitle, push.getAlert().getTitle());
                 npsView.setTextViewText(R.id.notificationText, push.getAlert().getBody());
 
-                String urlImage = push.getAlert().getString("background_image");
+                String urlImage = push.getAlert().getString(BACKGROUND_IMAGE_KEY);
 
 
                 if (urlImage != null) {
@@ -343,7 +331,7 @@ public class RichNotification {
                 notificationManager.notify(reqId, notification);
                 break;
             }
-            case TYPE_COUNTDOWN_TIMER:
+            case TYPE_COUNTDOWN_TIMER: {
                 long timeCount = richNotification.getInt("timer", 0) * 1000L;
                 RemoteViews collapsedTimerView = new RemoteViews(context.getPackageName(), R.layout.push_timer_colapsed);
                 collapsedTimerView.setTextViewText(R.id.notificationTitle, push.getAlert().getTitle());
@@ -361,7 +349,7 @@ public class RichNotification {
                     npsView.setChronometerCountDown(R.id.notificationTimer, true);
                 }
 
-                String urlImage = push.getAlert().getString("background_image");
+                String urlImage = push.getAlert().getString(BACKGROUND_IMAGE_KEY);
                 Bitmap bigPicture = DownloadManager.getBitmapFromURL(urlImage, false);
                 if (bigPicture != null) {
                     npsView.setViewVisibility(R.id.big_picture_imageview, View.VISIBLE);
@@ -384,8 +372,10 @@ public class RichNotification {
                 notification.flags = Notification.FLAG_AUTO_CANCEL;
                 notificationManager.notify(reqId, notification);
                 break;
-            case TYPE_ZERO_BEZEL:
-                String urlImageBezel = push.getAlert().getString("background_image");;
+            }
+            case TYPE_ZERO_BEZEL: {
+                String urlImageBezel = push.getAlert().getString(BACKGROUND_IMAGE_KEY);
+                ;
 
                 Bitmap bigPictureBezel = DownloadManager.getBitmapFromURL(urlImageBezel, false);
                 RemoteViews collapsedView = new RemoteViews(context.getPackageName(), R.layout.push_zero_bezel_collapse);
@@ -396,7 +386,7 @@ public class RichNotification {
                 RemoteViews bigPictureView = new RemoteViews(context.getPackageName(), R.layout.push_zero_bezel);
                 bigPictureView.setTextViewText(R.id.title, push.getAlert().getTitle());
                 bigPictureView.setTextViewText(R.id.msg, push.getAlert().getBody());
-                bigPictureView.setInt(R.id.msg, "setMaxLines", 4);
+                bigPictureView.setInt(R.id.msg, ACTION_SET_MAXLINES, 4);
                 bigPictureView.setTextViewText(R.id.tv_sub, context.getApplicationInfo().loadLabel(context.getPackageManager()).toString());
 
                 if (bigPictureBezel != null) {
@@ -410,7 +400,6 @@ public class RichNotification {
                     bigPictureView.setViewVisibility(R.id.big_image, View.GONE);
                 }
 
-//                createNotification(context, collapsedView, bigPictureView, contentPendingIntent, deletePendingIntent, reqId);
                 Notification notificationBezel = new NotificationCompat.Builder(context, MY_CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setCustomContentView(collapsedView)
@@ -423,6 +412,22 @@ public class RichNotification {
                 notificationBezel.flags = Notification.FLAG_AUTO_CANCEL;
                 notificationManagerBezel.notify(reqId, notificationBezel);
                 break;
+            }
+            default: {
+                String urlImage = push.getAlert().getString(BACKGROUND_IMAGE_KEY);
+
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(context, MY_CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle(push.getAlert().getTitle())
+                        .setContentText(push.getAlert().getBody())
+                        .setContentIntent(contentPendingIntent)
+                        .setDeleteIntent(deletePendingIntent)
+                        .setGroup("SDKMobio")
+                        .setAutoCancel(true);
+
+                new DownloadImageNotificationTask(context, builder, reqId).execute(urlImage);
+                break;
+            }
         }
     }
 

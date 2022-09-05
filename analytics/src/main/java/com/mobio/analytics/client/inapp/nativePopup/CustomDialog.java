@@ -21,12 +21,12 @@ public class CustomDialog extends BaseDialog{
 
     @Override
     void close() {
-
+        //empty body
     }
 
     @Override
     void cancel() {
-
+        //empty body
     }
 
     @Override
@@ -39,7 +39,7 @@ public class CustomDialog extends BaseDialog{
 
     @Override
     void doDismiss() {
-
+        //empty body
     }
 
     @Override

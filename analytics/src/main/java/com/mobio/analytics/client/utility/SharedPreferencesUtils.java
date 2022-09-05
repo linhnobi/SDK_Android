@@ -29,6 +29,10 @@ public class SharedPreferencesUtils {
     public static final String M_KEY_SDK_NAME = "sdk_name";
     public static final String M_KEY_ALLOW_CALL_API = "m_allow_call_api";
 
+    private SharedPreferencesUtils() {
+        throw new IllegalStateException("SharedPreferencesUtils class");
+    }
+
     private static SharedPreferences getSharedPreferences(Context context){
         return context.getSharedPreferences(M_KEY_SHARED_PREFERENCES, Context.MODE_PRIVATE);
     }

@@ -30,6 +30,10 @@ import java.util.List;
 
 public class ModelFactory {
 
+    private ModelFactory() {
+        throw new IllegalStateException("ModelFactory class");
+    }
+
     private static Device getDevice(Context context){
         return new Device().putChannel("app")
                 .putType("mobile")

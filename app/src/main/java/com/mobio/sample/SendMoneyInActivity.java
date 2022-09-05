@@ -33,16 +33,12 @@ public class SendMoneyInActivity extends AppCompatActivity implements View.OnCli
     public static final String MONEY_TO = "money_to";
     public static final String CONTENT_TO = "content_to";
 
-    private static final long DISCONNECT_TIMEOUT = 10000;
-
     private Button btnContinue;
     private ImageView imvBack;
     private EditText edtAccount;
     private EditText edtMoney;
     private EditText edtContent;
     private TextView tvName;
-
-    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,20 +54,13 @@ public class SendMoneyInActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public void onUserInteraction() {
-        resetDisconnectTimer();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-        resetDisconnectTimer();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        stopDisconnectTimer();
     }
 
     public void init(){
@@ -81,8 +70,6 @@ public class SendMoneyInActivity extends AppCompatActivity implements View.OnCli
         edtMoney = findViewById(R.id.et_amount_money);
         edtContent = findViewById(R.id.et_content);
         tvName = findViewById(R.id.tv_name);
-
-        handler = new Handler();
 
         imvBack.setOnClickListener(this);
         btnContinue.setOnClickListener(this);
@@ -127,7 +114,7 @@ public class SendMoneyInActivity extends AppCompatActivity implements View.OnCli
                     edtMoney.removeTextChangedListener(this);
                     String value = edtMoney.getText().toString();
 
-                    if (value != null && !value.equals(""))
+                    if (!value.equals(""))
                     {
 
                         if(value.startsWith(".")){
@@ -140,12 +127,10 @@ public class SendMoneyInActivity extends AppCompatActivity implements View.OnCli
 
 
                         String str = edtMoney.getText().toString().replaceAll(",", "");
-                        if (!value.equals(""))
-                            edtMoney.setText(getDecimalFormattedString(str));
+                        edtMoney.setText(getDecimalFormattedString(str));
                         edtMoney.setSelection(edtMoney.getText().toString().length());
                     }
                     edtMoney.addTextChangedListener(this);
-                    return;
                 }
                 catch (Exception ex)
                 {
@@ -154,15 +139,6 @@ public class SendMoneyInActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         });
-    }
-
-    public void resetDisconnectTimer(){
-        handler.removeCallbacks(timeOutRunable);
-        handler.postDelayed(timeOutRunable, DISCONNECT_TIMEOUT);
-    }
-
-    public void stopDisconnectTimer(){
-        handler.removeCallbacks(timeOutRunable);
     }
 
     public static String getDecimalFormattedString(String value)
@@ -202,53 +178,6 @@ public class SendMoneyInActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    private Runnable timeOutRunable = new Runnable() {
-        @Override
-        public void run() {
-            stopDisconnectTimer();
-            if(com.mobio.analytics.client.utility.SharedPreferencesUtils.getBool(SendMoneyInActivity.this,
-                    com.mobio.analytics.client.utility.SharedPreferencesUtils.M_KEY_APP_FOREGROUND)){
-                showPopup();
-            }
-            else {
-                int reqCode = 1;
-                Intent intent = new Intent(getApplicationContext(), SendMoneyInActivity.class);
-                showNotification(SendMoneyInActivity.this, "SDKMobio", "Send money to bank now", intent, reqCode);
-            }
-        }
-    };
-
-    public void showPopup(){
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.custom_popup);
-
-        Button btnAction = (Button) dialog.findViewById(R.id.btn_action);
-        ImageView imvClose = (ImageView) dialog.findViewById(R.id.imv_close);
-
-        imvClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                //Analytics.getInstance().track(Analytics.DEMO_EVENT, Analytics.TYPE_CLICK,"Click No on Popup");
-            }
-        });
-
-        btnAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    //Analytics.getInstance().track(Analytics.DEMO_EVENT, Analytics.TYPE_CLICK,"Click Yes on Popup");
-                    resetDisconnectTimer();
-                }
-            }
-        });
-
-        dialog.show();
-    }
-
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -265,65 +194,25 @@ public class SendMoneyInActivity extends AppCompatActivity implements View.OnCli
         String money = edtMoney.getText().toString();
         String contentTo = edtContent.getText().toString();
 
-        if(tvName.getVisibility() == View.VISIBLE){
-            if(!TextUtils.isEmpty(accountTo) && !TextUtils.isEmpty(accountName)
-            && !TextUtils.isEmpty(money) && !TextUtils.isEmpty(contentTo)){
-                Intent intent = new Intent(SendMoneyInActivity.this, ConfirmTransferActivity.class);
-                intent.putExtra(ACCOUNT_TO, accountTo);
-                intent.putExtra(ACCOUNT_NAME_TO, accountName);
-                intent.putExtra(MONEY_TO, money);
-                intent.putExtra(CONTENT_TO, contentTo);
+        if (tvName.getVisibility() == View.VISIBLE && !TextUtils.isEmpty(accountTo) && !TextUtils.isEmpty(accountName)
+                && !TextUtils.isEmpty(money) && !TextUtils.isEmpty(contentTo)) {
+            Intent intent = new Intent(SendMoneyInActivity.this, ConfirmTransferActivity.class);
+            intent.putExtra(ACCOUNT_TO, accountTo);
+            intent.putExtra(ACCOUNT_NAME_TO, accountName);
+            intent.putExtra(MONEY_TO, money);
+            intent.putExtra(CONTENT_TO, contentTo);
 
-                startActivity(intent);
-            }
+            startActivity(intent);
         }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        //Analytics.getInstance().track(Analytics.DEMO_EVENT, Analytics.TYPE_CLICK,"Click Open from noti");
-        resetDisconnectTimer();
-    }
-
-    public void showNotification(Context context, String title, String message, Intent intent, int reqCode) {
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, reqCode, intent, PendingIntent.FLAG_ONE_SHOT);
-        String CHANNEL_ID = "channel_name";// The id of the channel.
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(title)
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setDeleteIntent(createOnDismissedIntent(this, reqCode))
-                .setContentIntent(pendingIntent);
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Channel Name";// The user-visible name of the channel.
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
-            notificationManager.createNotificationChannel(mChannel);
-        }
-        notificationManager.notify(reqCode, notificationBuilder.build()); // 0 is the request code, it should be unique id
-    }
-
-    private PendingIntent createOnDismissedIntent(Context context, int notificationId) {
-        Intent intent = new Intent(context, NotificationDismissedReceiver.class);
-        intent.putExtra("notificationId", notificationId);
-
-        PendingIntent pendingIntent =
-                PendingIntent.getBroadcast(context.getApplicationContext(),
-                        notificationId, intent, PendingIntent.FLAG_ONE_SHOT);
-        return pendingIntent;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(handler != null){
-            if(timeOutRunable != null) {
-                handler.removeCallbacks(timeOutRunable);
-            }
-        }
     }
 }

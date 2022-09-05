@@ -12,6 +12,7 @@ public class Event extends ValueMap{
     private static final String KEY_INCLUEDED_REPORT= "included_report";
 
     public Event() {
+        // Empty body
     }
 
     public Event(int initialCapacity) {
@@ -23,6 +24,7 @@ public class Event extends ValueMap{
         super(delegate);
     }
 
+    @Override
     public Event putValue(String key, Object value) {
         super.putValue(key, value);
         return this;

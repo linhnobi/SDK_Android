@@ -17,6 +17,7 @@ public class Os extends Properties{
         super(delegate);
     }
 
+    @Override
     public Os putValue(String key, Object value){
         super.putValue(key, value);
         return this;

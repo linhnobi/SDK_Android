@@ -49,13 +49,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WebviewController {
+    private static final String BUTTON_KEY = "button";
+    private static final String POPUP_BUILDER_KEY = "popup_builder";
+
     private static final String HTML_MIME_TYPE = "text/html";
     private static final String HTML_ENCODING = "utf-8";
     private static final int ID_OF_URL_BAR = 112233;
     private static final int ID_OF_URL_TEXTVIEW = 332211;
     private static final int ID_OF_URL_LINE = 222211;
     public static final String M_KEY_PUSH = "m_key_push";
-    private static final String templateHtml = "<html>\n" +
+    private static final String TEMPLATE_HTML = "<html>\n" +
             "  <head>\n" +
             "    <meta name=viewport content=width=device-width, initial-scale=1, user-scalable=0>\n" +
             "    <style>\n" +
@@ -197,15 +200,16 @@ public class WebviewController {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-//                dismissMessage();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    LogMobio.logE("PopupBuilderActivity", "onReceivedError " + error.getErrorCode());
+                }
             }
 
             @Override
             public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    LogMobio.logD("PopupBuilderActivity", "onReceivedHttpError " + errorResponse.getStatusCode() + " url " + request.getUrl());
+                    LogMobio.logE("PopupBuilderActivity", "onReceivedHttpError " + errorResponse.getStatusCode() + " url " + request.getUrl());
                 }
-//                dismissMessage();
             }
 
             @SuppressWarnings("deprecation")
@@ -284,11 +288,9 @@ public class WebviewController {
         webView.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-                        dismissMessage();
-                        return true;
-                    }
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+                    dismissMessage();
+                    return true;
                 }
                 return false;
             }
@@ -488,8 +490,8 @@ public class WebviewController {
         int includedReport = dataVM.getInt("includedReport", 0);
 
         Properties value = createValueForBase("submit", buttonId, field, tags);
-        Event.Base base = ModelFactory.createBase("button", value);
-        Event event = new Event().putBase(base).putSource("popup_builder")
+        Event.Base base = ModelFactory.createBase(BUTTON_KEY, value);
+        Event event = new Event().putBase(base).putSource(POPUP_BUILDER_KEY)
                 .putType("submit")
                 .putIncludedReport(includedReport)
                 .putActionTime(actionTime);
@@ -547,7 +549,7 @@ public class WebviewController {
                 listDynamic.add(new Event.Dynamic().putEventKey(eventKey).putEventData(
                         new Properties().putValue("action_time", actionTime)));
 
-                Event eventDynamic = new Event().putSource("popup_builder")
+                Event eventDynamic = new Event().putSource(POPUP_BUILDER_KEY)
                         .putType("dynamic")
                         .putActionTime(action_time)
                         .putDynamic(listDynamic);
@@ -557,8 +559,8 @@ public class WebviewController {
 
         if (includedReport == 1) {
             Properties value = createValueForBase("click", id, null, tags);
-            Event.Base base = ModelFactory.createBase("button", value);
-            Event event = new Event().putBase(base).putSource("popup_builder")
+            Event.Base base = ModelFactory.createBase(BUTTON_KEY, value);
+            Event event = new Event().putBase(base).putSource(POPUP_BUILDER_KEY)
                     .putType("click")
                     .putActionTime(System.currentTimeMillis())
                     .putIncludedReport(includedReport);
@@ -583,6 +585,8 @@ public class WebviewController {
             case "screen:RechargeConfirm":
                 desScreen = "com.mobio.demoanalytics.activity.ConfirmMobileRechargeActivity";
                 break;
+            default:
+                break;
         }
         if(desScreen != null){
             Class<?> act = null;
@@ -599,7 +603,7 @@ public class WebviewController {
 
     private Properties createValueForBase(String type, String id, Properties field, List<Properties> tags) {
         Properties value = new Properties()
-                .putValue("button", new Properties().putValue("type", type).putValue("id", id))
+                .putValue(BUTTON_KEY, new Properties().putValue("type", type).putValue("id", id))
                 .putValue("tags", tags)
                 .putValue("journey", ModelFactory.getJourney(push));
         if (field != null) value.putValue("input_fields", field);
@@ -609,8 +613,8 @@ public class WebviewController {
 
     private String genDynamicHtml(String receiveHtml) {
         Pattern word = Pattern.compile(keyWordSubstr);
-        Matcher match = word.matcher(templateHtml);
-        String html = templateHtml;
+        Matcher match = word.matcher(TEMPLATE_HTML);
+        String html = TEMPLATE_HTML;
         int endPos = 0;
         while (match.find()) {
             endPos = match.end();

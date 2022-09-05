@@ -73,20 +73,6 @@ public class HtmlController{
                 .getRootView();
     }
 
-    private void showLoading(ViewGroup container) {
-        ProgressBar progressBar = new ProgressBar(activity);
-        progressBar.setId(ID_OF_PROGRESSBAR);
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#A6ACAF"), android.graphics.PorterDuff.Mode.MULTIPLY);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-        container.addView(progressBar, params);
-    }
-
-    private void hideLoading(ViewGroup container) {
-        container.removeView(container.findViewById(ID_OF_PROGRESSBAR));
-    }
-
     private void createWebview(ViewGroup container){
         webView = new WebView(activity);
         webView.setId(ViewCompat.generateViewId());

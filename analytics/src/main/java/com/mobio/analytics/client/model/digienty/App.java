@@ -19,6 +19,7 @@ public class App extends Properties{
         super(delegate);
     }
 
+    @Override
     public App putValue(String key, Object value){
         super.putValue(key, value);
         return this;

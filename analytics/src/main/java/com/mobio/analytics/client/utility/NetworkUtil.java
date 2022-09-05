@@ -12,6 +12,10 @@ public class NetworkUtil {
     public static final int NETWORK_STATUS_WIFI = 1;
     public static final int NETWORK_STATUS_MOBILE = 2;
 
+    private NetworkUtil() {
+        throw new IllegalStateException("NetworkUtil class");
+    }
+
     public static int getConnectivityStatus(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 

@@ -37,6 +37,8 @@ public class RetrofitClient {
     private static RetrofitClient instance = null;
     private Api myApi;
 
+    private static final String TAG = "RetrofitClient";
+
     private RetrofitClient(Context context) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(SharedPreferencesUtils.getString(context, SharedPreferencesUtils.M_KEY_BASE_URL))
@@ -64,10 +66,12 @@ public class RetrofitClient {
                     new X509TrustManager() {
                         @Override
                         public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                            //empty body
                         }
 
                         @Override
                         public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                            //empty body
                         }
 
                         @Override
@@ -96,7 +100,8 @@ public class RetrofitClient {
 //            builder.addInterceptor(new CompressionRequestInterceptor());
             return builder;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            LogMobio.logE(TAG, "Exception "+e.getMessage());
+            return null;
         }
     }
 
@@ -105,11 +110,13 @@ public class RetrofitClient {
         int waitThreshold = 10000;
 
         @Inject
-        public ErrorInterceptor() { }
+        public ErrorInterceptor() {
+            // Empty body
+        }
 
         @Override
         public Response intercept(Chain chain) throws IOException {
-            LogMobio.logD("RetrofitClient", "intercept");
+            LogMobio.logD(TAG, "intercept");
             Request request = chain.request();
             Response response = null;
             boolean responseOK = false;
@@ -123,19 +130,12 @@ public class RetrofitClient {
                     response = chain.proceed(request);
                     responseOK = response.isSuccessful();
                 }catch (Exception e){
-                    LogMobio.logD("RetrofitClient", "error "+e.toString());
+                    LogMobio.logD(TAG, "error "+e.toString());
                 }finally{
-//                    if(!responseOK){
-//                        try {
-//                            Thread.sleep(waitThreshold);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
                     tryCount++;
-                    LogMobio.logD("RetrofitClient", "retry "+tryCount);
+                    LogMobio.logD(TAG, "retry "+tryCount);
                     if (response != null) {
-                        LogMobio.logD("RetrofitClient", "code "+response.code());
+                        LogMobio.logD(TAG, "code "+response.code());
                     }
                 }
             }

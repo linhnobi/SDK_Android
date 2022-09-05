@@ -214,14 +214,17 @@ public class GpsTracker extends Service implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
+        //empty body
     }
 
     @Override
     public void onProviderEnabled(String provider) {
+        //empty body
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
+        //empty body
     }
 
     @Override

@@ -19,6 +19,7 @@ public class Network extends Properties {
         super(delegate);
     }
 
+    @Override
     public Network putValue(String key, Object value){
         super.putValue(key, value);
         return this;

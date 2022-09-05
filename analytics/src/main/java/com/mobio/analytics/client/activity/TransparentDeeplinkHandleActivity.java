@@ -11,7 +11,6 @@ import android.os.Bundle;
 
 import com.mobio.analytics.client.model.digienty.Push;
 import com.mobio.analytics.client.service.ClickNotificationService;
-import com.mobio.analytics.client.utility.LogMobio;
 
 public class TransparentDeeplinkHandleActivity extends AppCompatActivity {
 

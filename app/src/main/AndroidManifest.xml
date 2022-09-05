@@ -17,19 +17,19 @@
         android:theme="@style/Theme.AnalyticsSDK">
         <activity
             android:name=".KotlinActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".TransferSuccessActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".ConfirmTransferActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".SendMoneyInActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".SendMoneyActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".HomeActivity"
             android:exported="true"
@@ -71,10 +71,6 @@
                 <!-- note that the leading "/" is required for pathPrefix -->
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SavingActivity"
-            android:exported="true"
-            android:launchMode="singleTop" />
         <activity
             android:name=".LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

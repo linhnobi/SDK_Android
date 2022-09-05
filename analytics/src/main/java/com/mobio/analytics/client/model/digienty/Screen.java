@@ -17,6 +17,7 @@ public class Screen extends Properties {
         super(delegate);
     }
 
+    @Override
     public Screen putValue(String key, Object value){
         super.putValue(key, value);
         return this;

@@ -25,6 +25,7 @@ public class Push extends Properties {
         super(delegate);
     }
 
+    @Override
     public Push putValue(String key, Object value){
         super.putValue(key, value);
         return this;

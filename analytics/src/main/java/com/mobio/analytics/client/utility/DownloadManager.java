@@ -1,12 +1,10 @@
 package com.mobio.analytics.client.utility;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.http.HttpResponseCache;
 import android.util.Log;
 
-import java.io.File;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,11 +13,13 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Date;
 
 public class DownloadManager {
+    private DownloadManager() {
+        throw new IllegalStateException("DownloadManager class");
+    }
+
     private static final String TAG = DownloadManager.class.getSimpleName();
-    private static final long ONE_DAY = 24 * 60 * 60 * 1000;
     
     /**
      * This input stream extension is required to decode png images to bitmap
@@ -45,53 +45,6 @@ public class DownloadManager {
                 totalBytesSkipped += bytesSkipped;
             }
             return totalBytesSkipped;
-        }
-    }
-
-    public static void createHttpCache(Context context) {
-        try {
-            File httpCacheDir = new File(context.getCacheDir(), "http");
-            long httpCacheSize = 10 * 1024 * 1024;  // 10 MiB
-            HttpResponseCache.install(httpCacheDir, httpCacheSize);
-        } catch (IOException e) {
-            Log.e(TAG, "HTTP response cache installation failed", e);
-        }
-    }
-
-    public static void cleanHttpCache(Context context, int olderThanDays) {
-        try {
-            File httpCacheDir = new File(context.getCacheDir(), "http");
-            if (httpCacheDir.exists() && httpCacheDir.isDirectory()) {
-                File[] files = httpCacheDir.listFiles();
-                for (File file : files) {
-                    if (file != null) {
-                        long lastModified = file.lastModified();
-                        if (lastModified > 0) {
-                            Date lastMDate = new Date(lastModified);
-                            Date today = new Date(System.currentTimeMillis());
-                            long diff = today.getTime() - lastMDate.getTime();
-                            long diffDays = diff / ONE_DAY;
-                            if (olderThanDays < diffDays) {
-                                file.delete();
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "HTTP response cache installation failed", e);
-        }
-    }
-
-    public static void flushHttpCache() {
-        try {
-            HttpResponseCache cache = HttpResponseCache.getInstalled();
-            if (cache != null) {
-                cache.flush();
-            }
-            Log.d(TAG, "Flushed Http Cache");
-        } catch (Exception e) {
-            Log.e(TAG, "HTTP response cache installation failed", e);
         }
     }
 
@@ -164,10 +117,5 @@ public class DownloadManager {
                 }
             }
         }
-    }
-
-    public static void downloadBitmap(String src) {
-        Log.d(TAG, "Downloading image: " + src);
-        getBitmapFromURL(src, false);
     }
 }

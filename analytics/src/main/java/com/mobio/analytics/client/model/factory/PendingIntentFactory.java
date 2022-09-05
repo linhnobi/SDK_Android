@@ -13,6 +13,9 @@ import com.mobio.analytics.client.service.ClickNotificationService;
 import com.mobio.analytics.client.utility.Utils;
 
 public class PendingIntentFactory {
+    private PendingIntentFactory() {
+        throw new IllegalStateException("PendingIntentFactory class");
+    }
 
     public static PendingIntent getPushClickPendingIntent(Context context, Push push, int reqId, Class<?> des){
         Intent intent = new Intent();

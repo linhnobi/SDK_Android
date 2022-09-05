@@ -26,6 +26,7 @@ public class IdentityDetail extends Properties {
         super(delegate);
     }
 
+    @Override
     public IdentityDetail putValue(String key, Object value){
         super.putValue(key, value);
         return this;

@@ -52,6 +52,7 @@ public class PermissionDialog extends BaseDialog{
 
     @Override
     void doDismiss() {
+        //empty body
     }
 
     private void addPermissionNoti() {

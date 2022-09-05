@@ -25,6 +25,7 @@ public class Journey extends Properties{
         super(delegate);
     }
 
+    @Override
     public Journey putValue(String key, Object value){
         super.putValue(key, value);
         return this;

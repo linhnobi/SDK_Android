@@ -54,6 +54,12 @@ import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 public class Utils {
+    private static final String TAG = "Utils";
+
+    private Utils() {
+        throw new IllegalStateException("Utils class");
+    }
+
     /**
      * Returns the referrer who started the Activity.
      */
@@ -254,7 +260,7 @@ public class Utils {
         try {
             act = Class.forName(name);
         } catch (ClassNotFoundException e) {
-            LogMobio.logE("Utils", "ClassNotFoundException "+e);
+            LogMobio.logE(TAG, "ClassNotFoundException "+e);
         }
         return act;
     }
@@ -269,7 +275,7 @@ public class Utils {
                 //TODO
             }
         } catch (PackageManager.NameNotFoundException e) {
-            LogMobio.logE("Utils","NameNotFoundException "+e);
+            LogMobio.logE(TAG,"NameNotFoundException "+e);
         }
     }
 
@@ -295,7 +301,7 @@ public class Utils {
                 address = add;
             }
         } catch (IOException e) {
-            LogMobio.logE("Utils","IOException "+e);
+            LogMobio.logE(TAG,"IOException "+e);
         }
         return address;
     }

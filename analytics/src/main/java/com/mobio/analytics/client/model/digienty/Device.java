@@ -20,6 +20,7 @@ public class Device extends Properties {
         super(delegate);
     }
 
+    @Override
     public Device putValue(String key, Object value) {
         super.putValue(key, value);
         return this;

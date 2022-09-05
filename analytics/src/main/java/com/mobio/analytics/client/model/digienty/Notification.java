@@ -22,6 +22,7 @@ public class Notification extends Properties {
         super(delegate);
     }
 
+    @Override
     public Notification putValue(String key, Object value) {
         super.putValue(key, value);
         return this;

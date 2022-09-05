@@ -20,11 +20,9 @@ import java.security.SecureRandom;
 
 public class InAppController {
 
-    private static Push currentlyDisplayingInApp = null;
-
-    public static final String MInAppTypePopupBuilder = "popup";
-    public static final String MInAppTypeHtml = "html";
-    public static final String MInAppTypeAlert = "text";
+    private static final String IN_APP_TYPE_POPUP_BUILDER = "popup";
+    private static final String IN_APP_TYPE_HTML = "html";
+    private static final String IN_APP_TYPE_ALERT = "text";
 
     private Push push;
     private Class<?> des;
@@ -40,23 +38,14 @@ public class InAppController {
         InAppNativeFragment inAppFragment = null;
         String type = push.getAlert().getContentType();
         switch (type) {
-            case MInAppTypeAlert:
-//                if(getPopupPosition(push).equals("cc")) {
-//                    CustomDialog.showCustomDialog(activity, push, des);
-//                }
-//                else if(getPopupPosition(push).equals("tc")){
-//                    inAppFragment = new InAppNativeHeaderFragment();
-//                }
-//                else if(getPopupPosition(push).equals("bc")){
-//                    inAppFragment = new InAppNativeFooterFragment();
-//                }
+            case IN_APP_TYPE_ALERT:
                 int reqId = new SecureRandom().nextInt(10000);
                 MobioSDK.getInstance().showGlobalNotification(push, reqId);
                 break;
-            case MInAppTypeHtml:
+            case IN_APP_TYPE_HTML:
                 startPopupActivity(activity, push);
                 break;
-            case MInAppTypePopupBuilder:
+            case IN_APP_TYPE_POPUP_BUILDER:
                 if(getPopupPosition(push).equals("cc")){
                     startPopupActivity(activity, push);
                 }
@@ -64,18 +53,8 @@ public class InAppController {
                     HtmlController.showHtmlPopup(activity, push, assetPath);
                 }
                 break;
-        }
-
-        if(inAppFragment != null){
-            FragmentTransaction fragmentTransaction =((FragmentActivity) activity)
-                    .getSupportFragmentManager()
-                    .beginTransaction();
-            Bundle bundle = new Bundle();
-            bundle.putString(InAppNativeFragment.M_KEY_PUSH, new Gson().toJson(push));
-            inAppFragment.setArguments(bundle);
-            fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-            fragmentTransaction.add(android.R.id.content, inAppFragment);
-            fragmentTransaction.commit();
+            default:
+                break;
         }
     }
 

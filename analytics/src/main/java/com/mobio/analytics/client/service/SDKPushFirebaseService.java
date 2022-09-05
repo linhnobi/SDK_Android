@@ -7,8 +7,6 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.mobio.analytics.client.MobioSDK;
 
 public class SDKPushFirebaseService extends FirebaseMessagingService {
-    public SDKPushFirebaseService() {
-    }
 
     @Override
     public void onNewToken(@NonNull String token) {

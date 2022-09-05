@@ -39,6 +39,8 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             case Geofence.GEOFENCE_TRANSITION_EXIT:
                 Toast.makeText(context,"GEOFENCE_TRANSITION_EXIT",Toast.LENGTH_SHORT).show();
                 break;
+            default:
+                break;
         }
     }
 }

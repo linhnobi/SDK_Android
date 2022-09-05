@@ -142,8 +142,9 @@ public class ValueMap implements Map<String, Object> {
             return ((Number) value).intValue();
         } else if (value instanceof String) {
             try {
-                return Integer.valueOf((String) value);
+                return Integer.parseInt((String) value);
             } catch (NumberFormatException ignored) {
+                return defaultValue;
             }
         }
         return defaultValue;
@@ -162,8 +163,9 @@ public class ValueMap implements Map<String, Object> {
             return ((Number) value).longValue();
         } else if (value instanceof String) {
             try {
-                return Long.valueOf((String) value);
+                return Long.parseLong((String) value);
             } catch (NumberFormatException ignored) {
+                return defaultValue;
             }
         }
         return defaultValue;
@@ -182,8 +184,9 @@ public class ValueMap implements Map<String, Object> {
             return ((Number) value).doubleValue();
         } else if (value instanceof String) {
             try {
-                return Double.valueOf((String) value);
+                return Double.parseDouble((String) value);
             } catch (NumberFormatException ignored) {
+                return defaultValue;
             }
         }
         return defaultValue;
@@ -198,10 +201,8 @@ public class ValueMap implements Map<String, Object> {
         if (value instanceof Character) {
             return (Character) value;
         }
-        if (value != null && value instanceof String) {
-            if (((String) value).length() == 1) {
-                return ((String) value).charAt(0);
-            }
+        if (value != null && value instanceof String && ((String) value).length() == 1) {
+            return ((String) value).charAt(0);
         }
         return defaultValue;
     }
@@ -232,7 +233,7 @@ public class ValueMap implements Map<String, Object> {
         if (value instanceof Boolean) {
             return (boolean) value;
         } else if (value instanceof String) {
-            return Boolean.valueOf((String) value);
+            return Boolean.parseBoolean((String) value);
         }
         return defaultValue;
     }
@@ -314,6 +315,7 @@ public class ValueMap implements Map<String, Object> {
                 }
                 return real;
             } catch (Exception ignored) {
+                return null;
             }
         }
         return null;

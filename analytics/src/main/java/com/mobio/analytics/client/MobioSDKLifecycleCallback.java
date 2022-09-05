@@ -1,14 +1,10 @@
 package com.mobio.analytics.client;
 
-import static com.mobio.analytics.client.activity.PopupBuilderActivity.M_KEY_PUSH;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,9 +24,6 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.gson.Gson;
-import com.mobio.analytics.client.activity.PopupBuilderActivity;
 import com.mobio.analytics.client.inapp.InAppController;
 import com.mobio.analytics.client.model.factory.ModelFactory;
 import com.mobio.analytics.client.model.digienty.Push;
@@ -45,6 +38,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MobioSDKLifecycleCallback implements Application.ActivityLifecycleCallbacks {
+    private static final String SCREEN_NAME_KEY = "screen_name";
+
     private MobioSDK mobioSDK;
     private boolean shouldTrackApplicationLifecycleEvents;
     private boolean shouldTrackScreenLifecycleEvents;
@@ -233,12 +228,12 @@ public class MobioSDKLifecycleCallback implements Application.ActivityLifecycleC
 
     private void trackOpenScreen(ScreenConfigObject screenConfigObject){
         long actionTime = System.currentTimeMillis();
-        mobioSDK.track(MobioSDK.SDK_MOBILE_SCREEN_START_IN_APP, new Properties().putValue("screen_name", screenConfigObject.getTitle()));
+        mobioSDK.track(MobioSDK.SDK_MOBILE_SCREEN_START_IN_APP, new Properties().putValue(SCREEN_NAME_KEY, screenConfigObject.getTitle()));
     }
 
     private void trackCloseScreen(ScreenConfigObject screenConfigObject){
         if (screenConfigObject != null) {
-            mobioSDK.track(MobioSDK.SDK_MOBILE_SCREEN_END_IN_APP, new Properties().putValue("screen_name", screenConfigObject.getTitle()));
+            mobioSDK.track(MobioSDK.SDK_MOBILE_SCREEN_END_IN_APP, new Properties().putValue(SCREEN_NAME_KEY, screenConfigObject.getTitle()));
         }
     }
 
@@ -332,17 +327,15 @@ public class MobioSDKLifecycleCallback implements Application.ActivityLifecycleC
                                 int scrollX = view.getScrollX();
                                 int scrollY = view.getScrollY();
                                 percentScroll[0] = (int) (((float) scrollY / scrollRange[0]) * 100);
-                                if (percentScroll[0] % 5 == 0) {
-                                    if (activityConfigObjectHashMap != null && activityConfigObjectHashMap.size() > 0) {
-                                        ScreenConfigObject screenConfigObject = activityConfigObjectHashMap.get(activity.getClass().getSimpleName());
-                                        if (screenConfigObject == null) return;
-                                        long action_time = System.currentTimeMillis();
-                                        mobioSDK.track(ModelFactory.createBaseList(
-                                                ModelFactory.createBase("screen", new Properties().putValue("percentage_scroll", percentScroll[0])
-                                                        .putValue("screen_name", screenConfigObject.getTitle())
-                                                        .putValue("direction", "vertical").putValue("unit", "percent")),
-                                                "scroll", action_time, "digienty"), action_time);
-                                    }
+                                if (percentScroll[0] % 5 == 0 && activityConfigObjectHashMap != null && activityConfigObjectHashMap.size() > 0) {
+                                    ScreenConfigObject screenConfigObject = activityConfigObjectHashMap.get(activity.getClass().getSimpleName());
+                                    if (screenConfigObject == null) return;
+                                    long action_time = System.currentTimeMillis();
+                                    mobioSDK.track(ModelFactory.createBaseList(
+                                            ModelFactory.createBase("screen", new Properties().putValue("percentage_scroll", percentScroll[0])
+                                                    .putValue(SCREEN_NAME_KEY, screenConfigObject.getTitle())
+                                                    .putValue("direction", "vertical").putValue("unit", "percent")),
+                                            "scroll", action_time, "digienty"), action_time);
                                 }
                             }
                         });
@@ -365,7 +358,7 @@ public class MobioSDKLifecycleCallback implements Application.ActivityLifecycleC
                     int lengthOfVisitTime = screenConfigObject.getVisitTime().length;
                     for (int i = 0; i < lengthOfVisitTime; i++) {
                         if (screenConfigObject.getVisitTime()[i] == countSecond[0]) {
-                            mobioSDK.track(MobioSDK.SDK_MOBILE_TIME_VISIT_APP, new Properties().putValue("time_visit", countSecond[0]).putValue("screen_name", screenConfigObject.getTitle()));
+                            mobioSDK.track(MobioSDK.SDK_MOBILE_TIME_VISIT_APP, new Properties().putValue("time_visit", countSecond[0]).putValue(SCREEN_NAME_KEY, screenConfigObject.getTitle()));
                         }
                     }
                     if(countSecond[0] == screenConfigObject.getVisitTime()[screenConfigObject.getVisitTime().length-1]){
